@@ -1,6 +1,7 @@
 <?php
     $loggedIn = false;
     $showError = false;
+    $loginNotFound = false;
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         require "./partial/_dbconnect.php";
         $username = $_POST["username"];
@@ -8,19 +9,25 @@
 
 
         $exists = false;
-        $sql = "SELECT * FROM `users` WHERE uname ='$username' AND pass ='$password'";
+        // $sql = "SELECT * FROM `users` WHERE uname ='$username' AND pass ='$password'";
+        $sql = "SELECT * FROM `users` WHERE uname ='$username'";
         $result = mysqli_query($conn,$sql);
         $num = mysqli_num_rows($result);
 
         if($num == 1){
-            $login = true;
-            session_start();
-            $_SESSION['username'] = $username;
-            $_SESSION['loggedIn'] = true;
-            header("location: welcome.php");
-
+            while($row=mysqli_fetch_assoc($result)){
+                if(password_verify($password, $row['pass'])){
+                    $login = true;
+                    session_start();
+                    $_SESSION['username'] = $username;
+                    $_SESSION['loggedIn'] = true;
+                    header("location: welcome.php");
+                }else{
+                    $showError = "Invalid Credentials!";
+                }
+            }
         }else{
-            $showError = "Invalid Credentials!";
+            $loginNotFound = "Username not found!";
         }
     }
 ?>
@@ -62,7 +69,15 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>';
-            }
+        }
+        if($loginNotFound){
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> '. $loginNotFound .'    .
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>';
+        }
     ?>
     
     

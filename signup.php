@@ -11,14 +11,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // check whether username exists or not 
     $existSql = "SELECT * FROM `users` WHERE uname = '$username'";
-    $result  = mysqli_query($conn, $existSql);
+    $result  = mysqli_query($conn, $existSql);  
     $numExistRows = mysqli_num_rows($result);
     if ($numExistRows > 0) {
         $showError = "Username Already Exists";
 
     } else {
         if (($password == $confirmPassword)) {
-            $sql = "INSERT INTO `users` (`uname`, `pass`, `dt`) VALUES ('$username', '$password', current_timestamp())";
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "INSERT INTO `users` (`uname`, `pass`, `dt`) VALUES ('$username', '$hash', current_timestamp())";
             $result = mysqli_query($conn, $sql);
 
             if ($result) {
