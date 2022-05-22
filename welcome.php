@@ -1,3 +1,15 @@
+<?php
+$login = false;
+session_start();
+
+if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
+    header("location: login.php");
+    exit();
+}else{
+    $login = true;
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -9,14 +21,25 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Welcome!</title>
+    <title>Welcome - <?php echo $_SESSION['username'] ?>!</title>
 </head>
 
 <body>
-<?php
+    <?php
     require "./partial/_nav.php";
     ?>
+        <?php
+        if($login){
+        echo '<div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>'.$_SESSION['username'].'</strong> logged in successfully!.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>';
+        }
+    ?>
 
+    Welcome - <?php echo $_SESSION['username'] ?>
 
 
     <!-- Optional JavaScript -->
