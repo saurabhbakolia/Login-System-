@@ -40,6 +40,13 @@ if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
     ?>
     <div class="container text-center">
         <h1>Welcome to <b>Allsafe</b>- <strong><?php echo $_SESSION['username'] ?></strong></h1>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">You are logged in as <?php echo $_SESSION['username'] ?> </h5>
+                <p class="card-text">welcome to the Allsafe welcome page. We respect your privacy.Logout before leaving this page- <pre>using the logout button below -</pre></p>
+                <a href="/loginsystem/logout.php" class="btn btn-primary">Log Out</a>
+            </div>  
+        </div>
     </div>
 
 
