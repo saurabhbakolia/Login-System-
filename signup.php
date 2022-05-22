@@ -1,25 +1,34 @@
 <?php
-    $showAlert = false;
-    $showError = false;
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        require "./partial/_dbconnect.php";
-        $username = $_POST["username"];
-        $password = $_POST["password"];   
-        $confirmPassword = $_POST["confirmPassword"];
+$showAlert = false;
+$showError = false;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    require "./partial/_dbconnect.php";
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $confirmPassword = $_POST["confirmPassword"];
 
-        $exists = false;
-        if(($password == $confirmPassword) && $exists == false){
-                $sql = "INSERT INTO `users` (`uname`, `pass`, `dt`) VALUES ('$username', '$password', current_timestamp())";
-                $result = mysqli_query($conn,$sql);
+    $exists = false;
 
-                if($result){
-                    $showAlert = true;
-                }
-        }else{
+    // check whether username exists or not 
+    $existSql = "SELECT * FROM `users` WHERE uname = '$username'";
+    $result  = mysqli_query($conn, $existSql);
+    $numExistRows = mysqli_num_rows($result);
+    if ($numExistRows > 0) {
+        $showError = "Username Already Exists";
+
+    } else {
+        if (($password == $confirmPassword)) {
+            $sql = "INSERT INTO `users` (`uname`, `pass`, `dt`) VALUES ('$username', '$password', current_timestamp())";
+            $result = mysqli_query($conn, $sql);
+
+            if ($result) {
+                $showAlert = true;
+            }
+        } else {
             $showError = "Passwords do not match!";
         }
-
     }
+}
 ?>
 
 
@@ -43,26 +52,26 @@
     ?>
 
     <?php
-        if($showAlert){
+    if ($showAlert) {
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>Success!</strong> Your account has been created successfully, Now you can login to Allsafe.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         </div>';
-        }
+    }
 
-        if($showError){
-            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Error!</strong> '. $showError .'    .
+    if ($showError) {
+        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> ' . $showError . '    .
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>';
-            }
+    }
     ?>
-    
-    
+
+
 
     <div class="container my-5">
         <div class="container text-center">

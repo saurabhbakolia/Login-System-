@@ -5,7 +5,7 @@ session_start();
 if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
     header("location: login.php");
     exit();
-}else{
+} else {
     $login = true;
 }
 ?>
@@ -28,18 +28,19 @@ if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true) {
     <?php
     require "./partial/_nav.php";
     ?>
-        <?php
-        if($login){
+    <?php
+    if ($login) {
         echo '<div class="alert alert-primary alert-dismissible fade show" role="alert">
-        <strong>'.$_SESSION['username'].'</strong> logged in successfully!.
+        <strong>' . $_SESSION['username'] . '</strong> logged in successfully!.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         </div>';
-        }
+    }
     ?>
-
-    Welcome - <?php echo $_SESSION['username'] ?>
+    <div class="container text-center">
+        <h1>Welcome to <b>Allsafe</b>- <strong><?php echo $_SESSION['username'] ?></strong></h1>
+    </div>
 
 
     <!-- Optional JavaScript -->
